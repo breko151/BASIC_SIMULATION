@@ -1,0 +1,2 @@
+Parámetros de entrada: [87, 1664525, 1013904223, 100], Muestro: 10, Posición de repetición: 4
+Parámetros de entrada: [87, 1664525, 1013904223, 100], Muestro: 10, Posición de repetición: 4
