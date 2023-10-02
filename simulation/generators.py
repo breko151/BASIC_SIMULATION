@@ -1,4 +1,3 @@
-
 # Definición del método de Congruencia Lineal.
 def congruence_method(seed, a, c, m, n, normalized = True):
     """
@@ -112,6 +111,7 @@ class LFSR:
         return decimal_value
 
 
+# Definición del método de Desplazamiento de Retroalimentación Lienal.
 def lfsr_method(seed, taps, n, num_bits = 8, normalized = True):
     """
         Implementación del método LFSR, generando números en su 
@@ -137,14 +137,17 @@ def lfsr_method(seed, taps, n, num_bits = 8, normalized = True):
     return random_list
 
 
+# Definición del método RAND.
 def rand(seed, n, normalized = True):
     return congruence_method(seed, 7**5, 0, 2**31 - 1, n, normalized = normalized)
 
 
+# Definición del método RANDU.
 def randu(seed, n, normalized = True):
     return congruence_method(seed, 2**16 + 3, 0, 2**31, n, normalized = normalized)
 
 
+# Definición del método Mersenne_Twister.
 def mersenne_twister(seed, n, normalized = True):
     # Inicialización general
     x_i_2 = x_i_3 = y_i_2 = y_i_3 = seed
@@ -174,29 +177,71 @@ def mersenne_twister(seed, n, normalized = True):
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
 
-# Identificación  de patrones
-def pattern_identifier(random_list, num_consider = 2):
+
+# Definición del método Congruencial Multiplicativo.
+def multiplicative_method(seed, a, m, n, normalized = True):
     """
-        Identificador de patrones en lista de pseudonúmeros aleatorios. 
-        Entrada: random_list, num_consider
-        Salida: pos
+        Función Generadora de pseudonúmeros aleatorios 
+        por el método de Congruencial Multiplicativo. 
+        Entrada: seed, a, m, n, normalized.
+        Salida: random_list
     """
-    # Obtenemos el patron.
-    pattern = random_list[:num_consider]
-    # Inicializamos el valor de posición. 
-    pos = 0
-    # Buscamos patrón.
-    for i in range(num_consider, len(random_list)):
-        temporal = [random_list[i + j] for j in range(num_consider)]
-        if temporal == pattern:
-            pos = i
-            break
     
-    return pos
+    # Inicialización de pseudonúmeros aleatorios.
+    random_list = list()
+    
+    # Iteración de n números.
+    for _ in range(n):
+        # Congruencia Lineal.
+        x_i = (a * seed) % m
+        random_value = x_i
+        # Normalización.
+        if normalized:
+            random_value = random_value / m
+        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        random_list.append(random_value)
+        # Remplazo de semilla.
+        seed = x_i
+    
+    # Retorno de lista de pseudonúmeros aleatorios.
+    return random_list
 
 
+# Definición del método Congruencial Aditivo.
+def additive_method(seed, c, m, n, normalized = True):
+    """
+        Función Generadora de pseudonúmeros aleatorios 
+        por el método de Congruencial Aditivo. 
+        Entrada: seed, c, m, n, normalized.
+        Salida: random_list
+    """
+    
+    # Inicialización de pseudonúmeros aleatorios.
+    random_list = list()
+    
+    # Iteración de n números.
+    for _ in range(n):
+        # Congruencia Lineal.
+        x_i = (seed + c) % m
+        random_value = x_i
+        # Normalización.
+        if normalized:
+            random_value = random_value / m
+        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        random_list.append(random_value)
+        # Remplazo de semilla.
+        seed = x_i
+    
+    # Retorno de lista de pseudonúmeros aleatorios.
+    return random_list
+
+# Definición del método Congruencial Cuadratico.
 
 
+# Definición del método de Productos Medios.
+
+ 
+# Definición del método de Multiplicador Constante. 
 
 
-
+# Definición del método de Blum Blum Shub.  
