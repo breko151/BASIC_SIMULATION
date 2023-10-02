@@ -235,13 +235,119 @@ def additive_method(seed, c, m, n, normalized = True):
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
 
+
 # Definición del método Congruencial Cuadratico.
+def congruence_method(seed, a, b, c, m, n, normalized = True):
+    """
+        Función Generadora de pseudonúmeros aleatorios 
+        por el método de Congruencial Cuadrático. 
+        Entrada: seed, a, b, c, m, n, normalized.
+        Salida: random_list
+    """
+    
+    # Inicialización de pseudonúmeros aleatorios.
+    random_list = list()
+    
+    # Iteración de n números.
+    for _ in range(n):
+        # Congruencia Lineal.
+        x_i = (a * seed ** 2 + b * seed + c) % m
+        random_value = x_i
+        # Normalización.
+        if normalized:
+            random_value = random_value / m
+        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        random_list.append(random_value)
+        # Remplazo de semilla.
+        seed = x_i
+    
+    # Retorno de lista de pseudonúmeros aleatorios.
+    return random_list
 
 
 # Definición del método de Productos Medios.
+def middle_products_method(seed, seed_2, n, normalized = True):
+    """
+        Función Generadora de pseudonúmeros aleatorios 
+        por el método de Productos Medios. 
+        Entrada: seed, seed_2, n, normialized.
+        Salida: random_list
+    """
+    # Validación de semilla.
+    t = len(str(seed))
+    t_2 = len(str(seed_2))
+    assert t % 2 == 0 and t > 3 and t_2 % 2 == 0 and t_2 > 3 and t == t_2, "Se requiere un número con digitos pares, con el número de dígitos mayor a 3."
+   
+    # Inicialización de pseudonúmeros aleatorios.
+    random_list = list()
+    
+    # Iteración de n números.
+    for _ in range(n):
+        # Elevación de la semilla al cuadrado.
+        square_value = str(seed ** seed_2)
+        # Validación del cuadrado.
+        while(len(square_value) < 2 * t):
+            square_value = '0' + square_value
+        # Obtención de los dígitos del centro.
+        initial_index = len(square_value) // t
+        random_value = int(square_value[initial_index:initial_index + t])
+        # Normalización.
+        if normalized:
+            random_value = random_value / (1 * 10 ** t)
+        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        random_list.append(random_value)
+        # Remplazo de semilla.
+        seed = seed_2
+        seed_2 = int(square_value[initial_index:initial_index + t])
+    
+    # Retorno de lista de pseudonúmeros aleatorios.
+    return random_list
 
  
 # Definición del método de Multiplicador Constante. 
+def constant_multiplier_method(seed, a, n, normalized = True):
+    """
+        Función Generadora de pseudonúmeros aleatorios 
+        por el método de Multiplicador Constante. 
+        Entrada: seed, seed_2, n, normialized.
+        Salida: random_list
+    """
+    # Validación de semilla.
+    t = len(str(seed))
+    assert t % 2 == 0 and t > 3, "Se requiere un número con digitos pares, con el número de dígitos mayor a 3."
+   
+    # Inicialización de pseudonúmeros aleatorios.
+    random_list = list()
+    
+    # Iteración de n números.
+    for _ in range(n):
+        # Elevación de la semilla al cuadrado.
+        square_value = str(seed * a)
+        # Validación del cuadrado.
+        while(len(square_value) < 2 * t):
+            square_value = '0' + square_value
+        # Obtención de los dígitos del centro.
+        initial_index = len(square_value) // t
+        random_value = int(square_value[initial_index:initial_index + t])
+        # Normalización.
+        if normalized:
+            random_value = random_value / (1 * 10 ** t)
+        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        random_list.append(random_value)
+        # Remplazo de semilla.
+        seed = int(square_value[initial_index:initial_index + t])
+    
+    # Retorno de lista de pseudonúmeros aleatorios.
+    return random_list
 
 
 # Definición del método de Blum Blum Shub.  
+def generador_blum_blum_shub(semilla, p, q, n):
+    m = p * q
+    valores_aleatorios = []
+    
+    for x in range(n):
+        semilla = (semilla ** 2) % m
+        valores_aleatorios.append(semilla / m)
+    
+    return valores_aleatorios
