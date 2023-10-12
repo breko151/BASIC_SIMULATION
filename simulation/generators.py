@@ -33,6 +33,7 @@ def congruence_method(seed, a, c, m, n, normalized=True):
             random_value = random_value / m
         # Append of new value to the list.
         random_list.append(random_value)
+        # Return of random value.
         return random_list[0]
     # 'n' iteration.
     for _ in range(n):
@@ -69,7 +70,7 @@ def multiplicative_method(seed, a, m, n, normalized = True):
     assert n > 0, f'\'n\' is a positive integer value.'
     # Get only a unique random value.
     if n == 1:
-        # Linear Congruence.
+        # Multiplicative congruent method.
         x_i = (a * seed) % m
         random_value = x_i
         # Normalization.
@@ -77,21 +78,21 @@ def multiplicative_method(seed, a, m, n, normalized = True):
             random_value = random_value / m
         # Append of new value to the list.
         random_list.append(random_value)
+        # Return of random value.
         return random_list[0]
     # 'n' iteration.
     for _ in range(n):
-        # Congruencia Lineal.
+        # Multiplicative congruent method.
         x_i = (a * seed) % m
         random_value = x_i
-        # Normalización.
+        # Normalization.
         if normalized:
             random_value = random_value / m
-        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        # Append of new value to the list.
         random_list.append(random_value)
-        # Remplazo de semilla.
+        # New seed.
         seed = x_i
-    
-    # Retorno de lista de pseudonúmeros aleatorios.
+    # Return of random list.
     return random_list
 
 # Definición del método de Cuadrados Medios.
