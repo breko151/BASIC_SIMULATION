@@ -95,6 +95,52 @@ def multiplicative_method(seed, a, m, n, normalized = True):
     # Return of random list.
     return random_list
 
+
+# Additive congruent method.
+def additive_method(seed, c, m, n, normalized = True):
+    """
+        Generation of random numbers with additive congruent method.
+        Arguments:
+            seed: an integer value.
+            c: an integer value.
+            m: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns: 
+            random_list: a list of values.
+    """
+    # List of random numbers.
+    random_list = list()
+    # Validation of n.
+    assert n > 0, f'\'n\' is a positive integer value.'
+    # Get only a unique random value.
+    if n == 1:
+        # Additive congruent method.
+        x_i = (seed + c) % m
+        random_value = x_i
+        # Normalization.
+        if normalized:
+            random_value = random_value / m
+        # Append of new value to the list.
+        random_list.append(random_value)
+        # Return of random value.
+        return random_list[0]
+    # 'n' iteration.
+    for _ in range(n):
+        # Additive congruent method.
+        x_i = (seed + c) % m
+        random_value = x_i
+        # Normalization.
+        if normalized:
+            random_value = random_value / m
+        # Append of new value to the list.
+        random_list.append(random_value)
+        # New seed.
+        seed = x_i
+    # Return of random list.
+    return random_list
+
+
 # Definición del método de Cuadrados Medios.
 def middle_square_method(seed, n, normalized = True):
     """
@@ -242,35 +288,6 @@ def mersenne_twister(seed, n, normalized = True):
         y_i_2 = y_i
         y_i_3 = y_i_2
 
-    # Retorno de lista de pseudonúmeros aleatorios.
-    return random_list
-
-
-# Definición del método Congruencial Aditivo.
-def additive_method(seed, c, m, n, normalized = True):
-    """
-        Función Generadora de pseudonúmeros aleatorios 
-        por el método de Congruencial Aditivo. 
-        Entrada: seed, c, m, n, normalized.
-        Salida: random_list
-    """
-    
-    # Inicialización de pseudonúmeros aleatorios.
-    random_list = list()
-    
-    # Iteración de n números.
-    for _ in range(n):
-        # Congruencia Lineal.
-        x_i = (seed + c) % m
-        random_value = x_i
-        # Normalización.
-        if normalized:
-            random_value = random_value / m
-        # Anexión de valores a lista de pseudonúmeros aleatorios.
-        random_list.append(random_value)
-        # Remplazo de semilla.
-        seed = x_i
-    
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
 
