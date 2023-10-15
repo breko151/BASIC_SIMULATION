@@ -52,7 +52,7 @@ def congruence_method(seed, a, c, m, n, normalized=True):
 
 
 # Multiplicative congruent method.
-def multiplicative_method(seed, a, m, n, normalized = True):
+def multiplicative_method(seed, a, m, n, normalized=True):
     """
         Generation of random numbers with multiplicative congruent method.
         Arguments:
@@ -97,7 +97,7 @@ def multiplicative_method(seed, a, m, n, normalized = True):
 
 
 # Additive congruent method.
-def additive_method(seed, c, m, n, normalized = True):
+def additive_method(seed, c, m, n, normalized=True):
     """
         Generation of random numbers with additive congruent method.
         Arguments:
@@ -129,6 +129,85 @@ def additive_method(seed, c, m, n, normalized = True):
     for _ in range(n):
         # Additive congruent method.
         x_i = (seed + c) % m
+        random_value = x_i
+        # Normalization.
+        if normalized:
+            random_value = random_value / m
+        # Append of new value to the list.
+        random_list.append(random_value)
+        # New seed.
+        seed = x_i
+    # Return of random list.
+    return random_list
+
+
+# RAND method.
+def rand(seed, n, normalized=True):
+    """
+        Generation of random numbers RAND method.
+        Arguments:
+            seed: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns: 
+            random_list: a list of values.
+    """
+    random_list = congruence_method(seed, 7 ** 5, 0, 2 ** 31 - 1, n, normalized=normalized) 
+    # Return of random list.
+    return random_list
+
+
+# RANDU method.
+def randu(seed, n, normalized=True):
+    """
+        Generation of random numbers RANDU method.
+        Arguments:
+            seed: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns: 
+            random_list: a list of values.
+    """
+    random_list = congruence_method(seed, 2 ** 16 + 3, 0, 2 ** 31, n, normalized=normalized)
+    # Return of random list.
+    return random_list
+
+
+# Congruent quadratic method
+def quadratic_method(seed, a, b, c, m, n, normalized=True):
+    """
+        Generation of random numbers Congruent quadratic method.
+        Arguments:
+            seed: an integer value.
+            a: an integer value.
+            b: an integer value.
+            c: an integer value.
+            m: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns: 
+            random_list: a list of values.
+    """
+    # List of random numbers.
+    random_list = list()
+    # Validation of n.
+    assert n > 0, f'\'n\' is a positive integer value.'
+    # Get only a unique random value.
+    if n == 1:
+        # Additive congruent method.
+        x_i = (a * seed ** 2 + b * seed + c) % m
+        random_value = x_i
+        # Normalization.
+        if normalized:
+            random_value = random_value / m
+        # Append of new value to the list.
+        random_list.append(random_value)
+        # Return of random value.
+        return random_list[0]
+    # 'n' iteration.
+    for _ in range(n):
+        # Congruent quadratic method.
+        x_i = (a * seed ** 2 + b * seed + c) % m
         random_value = x_i
         # Normalization.
         if normalized:
@@ -251,14 +330,7 @@ def lfsr_method(seed, taps, n, num_bits = 8, normalized = True):
     return random_list
 
 
-# Definición del método RAND.
-def rand(seed, n, normalized = True):
-    return congruence_method(seed, 7**5, 0, 2**31 - 1, n, normalized = normalized)
 
-
-# Definición del método RANDU.
-def randu(seed, n, normalized = True):
-    return congruence_method(seed, 2**16 + 3, 0, 2**31, n, normalized = normalized)
 
 
 # Definición del método Mersenne_Twister.
@@ -288,35 +360,6 @@ def mersenne_twister(seed, n, normalized = True):
         y_i_2 = y_i
         y_i_3 = y_i_2
 
-    # Retorno de lista de pseudonúmeros aleatorios.
-    return random_list
-
-
-# Definición del método Congruencial Cuadratico.
-def congruence_method(seed, a, b, c, m, n, normalized = True):
-    """
-        Función Generadora de pseudonúmeros aleatorios 
-        por el método de Congruencial Cuadrático. 
-        Entrada: seed, a, b, c, m, n, normalized.
-        Salida: random_list
-    """
-    
-    # Inicialización de pseudonúmeros aleatorios.
-    random_list = list()
-    
-    # Iteración de n números.
-    for _ in range(n):
-        # Congruencia Lineal.
-        x_i = (a * seed ** 2 + b * seed + c) % m
-        random_value = x_i
-        # Normalización.
-        if normalized:
-            random_value = random_value / m
-        # Anexión de valores a lista de pseudonúmeros aleatorios.
-        random_list.append(random_value)
-        # Remplazo de semilla.
-        seed = x_i
-    
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
 
