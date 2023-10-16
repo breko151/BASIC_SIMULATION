@@ -442,6 +442,61 @@ def middle_products_method(seed, seed_2, n, normalized=True):
     return random_list
 
 
+# Constant Multiplier method. 
+def constant_multiplier_method(seed, a, n, normalized=True):
+    """
+        Constant Multiplier method.
+        Arguments:
+            seed: an integer value.
+            a: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns:
+            random_list: a list of values.
+    """
+    # Seed validation.
+    t = len(str(seed))
+    assert t % 2 == 0 and t > 3, "A number with even digits is required, with the number of digits greater than 3."
+    # Initialization of pseudorandom numbers.
+    random_list = list()
+    # Get only a unique random value.
+    if n == 1:
+        # Multiplier with the constant.
+        product_result = str(seed * a)
+        # Product validation.
+        while(len(product_result) < 2 * t):
+            product_result = '0' + product_result
+        # Obtaining the center digits.
+        initial_index = len(product_result) // t
+        random_value = int(product_result[initial_index:initial_index + t])
+        # Normalization.
+        if normalized:
+            random_value = random_value / (1 * 10 ** t)
+        # Adding values to a list of pseudo random numbers.
+        random_list.append(random_value)
+        # Return of random value.
+        return random_list[0]
+    # N iteration.
+    for _ in range(n):
+        # Multiplier with the constant.
+        product_result = str(seed * a)
+        # Product validation.
+        while(len(product_result) < 2 * t):
+            product_result = '0' + product_result
+        # Obtaining the center digits.
+        initial_index = len(product_result) // t
+        random_value = int(product_result[initial_index:initial_index + t])
+        # Normalization.
+        if normalized:
+            random_value = random_value / (1 * 10 ** t)
+        # Adding values to a list of pseudo random numbers.
+        random_list.append(random_value)
+        # Seed update.
+        seed = int(product_result[initial_index:initial_index + t])
+    # Return of random list.
+    return random_list
+
+
 # Definición del método Mersenne_Twister.
 def mersenne_twister(seed, n, normalized = True):
     # Inicialización general
@@ -469,43 +524,6 @@ def mersenne_twister(seed, n, normalized = True):
         y_i_2 = y_i
         y_i_3 = y_i_2
 
-    # Retorno de lista de pseudonúmeros aleatorios.
-    return random_list
-
- 
-# Definición del método de Multiplicador Constante. 
-def constant_multiplier_method(seed, a, n, normalized = True):
-    """
-        Función Generadora de pseudonúmeros aleatorios 
-        por el método de Multiplicador Constante. 
-        Entrada: seed, seed_2, n, normialized.
-        Salida: random_list
-    """
-    # Validación de semilla.
-    t = len(str(seed))
-    assert t % 2 == 0 and t > 3, "Se requiere un número con digitos pares, con el número de dígitos mayor a 3."
-   
-    # Inicialización de pseudonúmeros aleatorios.
-    random_list = list()
-    
-    # Iteración de n números.
-    for _ in range(n):
-        # Elevación de la semilla al cuadrado.
-        square_value = str(seed * a)
-        # Validación del cuadrado.
-        while(len(square_value) < 2 * t):
-            square_value = '0' + square_value
-        # Obtención de los dígitos del centro.
-        initial_index = len(square_value) // t
-        random_value = int(square_value[initial_index:initial_index + t])
-        # Normalización.
-        if normalized:
-            random_value = random_value / (1 * 10 ** t)
-        # Anexión de valores a lista de pseudonúmeros aleatorios.
-        random_list.append(random_value)
-        # Remplazo de semilla.
-        seed = int(square_value[initial_index:initial_index + t])
-    
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
 
