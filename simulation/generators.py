@@ -385,42 +385,60 @@ def middle_square_method(seed, n, normalized=True):
     return random_list
 
 
-# Definición del método de Productos Medios.
-def middle_products_method(seed, seed_2, n, normalized = True):
+# Middle Products method.
+def middle_products_method(seed, seed_2, n, normalized=True):
     """
-        Función Generadora de pseudonúmeros aleatorios 
-        por el método de Productos Medios. 
-        Entrada: seed, seed_2, n, normialized.
-        Salida: random_list
+        Middle Products method implementation.
+        Arguments:
+            seed: an integer value.
+            seed_2: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns:
+            random_list: a list of values.
     """
-    # Validación de semilla.
+    # Seed validation.
     t = len(str(seed))
     t_2 = len(str(seed_2))
-    assert t % 2 == 0 and t > 3 and t_2 % 2 == 0 and t_2 > 3 and t == t_2, "Se requiere un número con digitos pares, con el número de dígitos mayor a 3."
-   
-    # Inicialización de pseudonúmeros aleatorios.
+    assert t % 2 == 0 and t > 3 and t_2 % 2 == 0 and t_2 > 3 and t == t_2, "A number with even digits is required, with the number of digits greater than 3."
+    # Initialization of pseudorandom numbers.
     random_list = list()
-    
-    # Iteración de n números.
-    for _ in range(n):
-        # Elevación de la semilla al cuadrado.
-        square_value = str(seed ** seed_2)
-        # Validación del cuadrado.
+    # Get only a unique random value.
+    if n == 1:
+        # Seed multiplication.
+        square_value = str(seed * seed_2)
+        # Product validation
         while(len(square_value) < 2 * t):
             square_value = '0' + square_value
-        # Obtención de los dígitos del centro.
+        # Obtaining the center digits.
         initial_index = len(square_value) // t
         random_value = int(square_value[initial_index:initial_index + t])
-        # Normalización.
+        # Normalization.
         if normalized:
             random_value = random_value / (1 * 10 ** t)
-        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        # Adding values to a list of pseudo random numbers.
         random_list.append(random_value)
-        # Remplazo de semilla.
+        # Return of random value.
+        return random_list[0]
+    # N iteration.
+    for _ in range(n):
+        # Seed multiplication.
+        square_value = str(seed * seed_2)
+        # Product validation
+        while(len(square_value) < 2 * t):
+            square_value = '0' + square_value
+        # Obtaining the center digits.
+        initial_index = len(square_value) // t
+        random_value = int(square_value[initial_index:initial_index + t])
+        # Normalization.
+        if normalized:
+            random_value = random_value / (1 * 10 ** t)
+        # Adding values to a list of pseudo random numbers.
+        random_list.append(random_value)
+        # Seed update.
         seed = seed_2
         seed_2 = int(square_value[initial_index:initial_index + t])
-    
-    # Retorno de lista de pseudonúmeros aleatorios.
+    # Return of random list.
     return random_list
 
 
