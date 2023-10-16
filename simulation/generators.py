@@ -173,7 +173,7 @@ def randu(seed, n, normalized=True):
     return random_list
 
 
-# Congruent quadratic method
+# Congruent quadratic method.
 def quadratic_method(seed, a, b, c, m, n, normalized=True):
     """
         Generation of random numbers Congruent quadratic method.
@@ -220,6 +220,116 @@ def quadratic_method(seed, a, b, c, m, n, normalized=True):
     return random_list
 
 
+# Linear Feedback Displacement Abstraction.
+class LFSR:
+    """
+        Linear Feedback Displacement Abstraction
+        Inital Arguments:
+            seed: an integer value.
+            taps: a list of values.
+        Methods:
+            shift(self)
+            generate_decimal(self, num_bits)
+    """
+    # Class Initialization.
+    def __init__(self, seed, taps):
+        # Flag initialization.
+        flag = True
+        # Seed validation.
+            # Seed to binary.
+        seed_bin = bin(seed)
+            # Seed to list.
+        seed_list = [int(i) for i in seed_bin[2:]]
+            # Bits more than a byte size.
+        while len(seed_list) < 8:
+            seed_list = [0] + seed_list
+            # Taps validation.
+        if len(taps) > len(seed_list):
+            flag = False
+        for i in taps:
+            if i >= len(seed_list):
+                flag = False
+        assert flag, f'Taps are incorrect. Try valid positions.'
+        # Fit self.state
+        self.state = seed_list
+        # Fit self.taps
+        self.taps = taps 
+    
+
+    # Get feedback bit.
+    def shift(self):
+        """
+            Shift method.
+            Arguments:
+                self.
+            Returns:
+                feedback_bit: an integer value.
+        """
+        # XOR Operation.
+        feedback_bit = sum(self.state[i] for i in self.taps) % 2
+        # State update.
+        self.state = [feedback_bit] + self.state[:-1]
+        return feedback_bit
+    
+
+    # Decimal convertor.
+    def generate_decimal(self, num_bits=8):
+        """
+            generate_decimal method.
+            Arguments:
+                num_bits: an integer value.
+            Returns:
+                decimal: an integer value.
+        """
+        decimal_value = 0
+        for _ in range(num_bits):
+            # Decimal value of num_bits.
+            decimal_value = (decimal_value << 1) | self.shift()
+        return decimal_value
+
+
+# Linear Feedback Displacement method.
+def lfsr_method(seed, taps, n, num_bits=8, normalized=True):
+    """
+        Linear Feedback Displacement method.
+        Arguments:
+            seed: an integer value.
+            taps: a list of values.
+            n: an integer value.
+            num_bits: an integer value.
+            normalized: a boolean value.
+        Returns:
+            random_list: a list of values.
+    """
+    # Initialization of pseudorandom numbers.
+    random_list = list()
+    # Initialization of LFSR Object.
+    lfsr = LFSR(seed, taps)
+    # Get only a unique random value.
+    if n == 1:
+        # Additive congruent method.
+        random_value = lfsr.generate_decimal(num_bits)
+        # Normalization.
+        if normalized:
+            max_value = 2 ** 8 - 1
+            random_value = random_value / max_value
+        # Append of new value to the list.
+        random_list.append(random_value)
+        # Return of random value.
+        return random_list[0]
+    # Generation of pseudorandom values.
+    for _ in range(n):
+        # Value generation.
+        random_value = lfsr.generate_decimal(num_bits)
+        # Normalization of the value.
+        if normalized:
+            max_value = 2 ** 8 - 1
+            random_value = random_value / max_value
+        # Annexation of values.
+        random_list.append(random_value)
+    # Return of random list.
+    return random_list
+
 # Definición del método de Cuadrados Medios.
 def middle_square_method(seed, n, normalized = True):
     """
@@ -255,81 +365,6 @@ def middle_square_method(seed, n, normalized = True):
     
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
-
-
-# Abstracción del Desplazamiento de Retroalimentación Lineal.
-class LFSR:
-    """
-        Generador de Desplazamiento de Retroalimentación Lineal.
-        Entrada: Seed, Taps.
-    """
-    
-    # Incialización Clase.
-    def __init__(self, seed, taps):
-        # Incialización de bandera.
-        flag = True
-        # Validación de la semilla.
-            # Convertimos semilla a binario.
-        seed_bin = bin(seed)
-            # Convertimos en arreglo
-        seed_list = [int(i) for i in seed_bin[2:]]
-            # Validamos que sea una cantidad mayor o igual 8 bits.
-        while len(seed_list) < 8:
-            seed_list = [0] + seed_list
-            # Validación de los taps.
-        if len(taps) > len(seed_list):
-            flag = False
-        for i in taps:
-            if i >= len(seed_list):
-                flag = False
-        assert flag, "Los taps son incorrectos. Asegurate de poner posiciones correctas."
-        # Mandamos la semilla convertida al state.
-        self.state = seed_list
-        # Posiciones de retroalimentación.
-        self.taps = taps 
-    
-    # Obtención de feedback_bit.
-    def shift(self):
-        # Operación xor.
-        feedback_bit = sum(self.state[i] for i in self.taps) % 2
-        # Actualización del State.
-        self.state = [feedback_bit] + self.state[:-1]
-        return feedback_bit
-    
-    # Conversor a decimal.
-    def generate_decimal(self, num_bits = 8):
-        decimal_value = 0
-        for _ in range(num_bits):
-            decimal_value = (decimal_value << 1) | self.shift()
-        return decimal_value
-
-
-# Definición del método de Desplazamiento de Retroalimentación Lienal.
-def lfsr_method(seed, taps, n, num_bits = 8, normalized = True):
-    """
-        Implementación del método LFSR, generando números en su 
-        forma decimal.
-        Entrada: seed, taps, n, num_bits, normalized.
-        Salida: random_list
-    """
-    # Inicialización de números pseudoaletorios.
-    random_list = list()
-    # Inicialización de Objeto LFSR.
-    lfsr = LFSR(seed, taps)
-    # Generación de valores pseudoaletorios.
-    for _ in range(n):
-        # Generación de valor.
-        random_value = lfsr.generate_decimal(num_bits)
-        # Normalización del valor.
-        if normalized:
-            max_value = 2 ** 8 - 1
-            random_value = random_value / max_value
-        # Anexión de los valores.
-        random_list.append(random_value)
-    
-    return random_list
-
-
 
 
 
