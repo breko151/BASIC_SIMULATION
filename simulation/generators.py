@@ -330,72 +330,58 @@ def lfsr_method(seed, taps, n, num_bits=8, normalized=True):
     # Return of random list.
     return random_list
 
-# Definición del método de Cuadrados Medios.
-def middle_square_method(seed, n, normalized = True):
+
+# Middle Squares method.
+def middle_square_method(seed, n, normalized=True):
     """
-        Función Generadora de pseudonúmeros aleatorios 
-        por el método de Cuadrados Medios. 
-        Entrada: seed, n, normialized.
-        Salida: random_list
+        Middle Squares method implementation.
+        Arguments:
+            seed: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns:
+            random_list: a list of values.
     """
-    # Validación de semilla.
+    # Seed validation.
     t = len(str(seed))
-    # assert t % 2 == 0 and t > 3, "Se requiere un número con digitos pares, con el número de dígitos mayor a 3."
-   
-    # Inicialización de pseudonúmeros aleatorios.
+    assert t % 2 == 0 and t > 3, "A number with even digits is required, with the number of digits greater than 3."
+    # Initialization of pseudorandom numbers.
     random_list = list()
-    
-    # Iteración de n números.
-    for _ in range(n):
-        # Elevación de la semilla al cuadrado.
+    # Get only a unique random value.
+    if n == 1:
+        # Elevation of the seed to squared.
         square_value = str(seed ** 2)
-        # Validación del cuadrado.
+        # Square validation.
         while(len(square_value) < 2 * t):
             square_value = '0' + square_value
-        # Obtención de los dígitos del centro.
+        # Obtaining the center digits.
         initial_index = len(square_value) // t
         random_value = int(square_value[initial_index:initial_index + t])
-        # Normalización.
+        # Normalization.
         if normalized:
             random_value = random_value / (1 * 10 ** t)
-        # Anexión de valores a lista de pseudonúmeros aleatorios.
+        # Append of new value to the list.
         random_list.append(random_value)
-        # Remplazo de semilla.
-        seed = int(square_value[initial_index:initial_index + t])
-    
-    # Retorno de lista de pseudonúmeros aleatorios.
-    return random_list
-
-
-
-# Definición del método Mersenne_Twister.
-def mersenne_twister(seed, n, normalized = True):
-    # Inicialización general
-    x_i_2 = x_i_3 = y_i_2 = y_i_3 = seed
-    z_i = 0
-    # Inicialización de pseudonúmeros aleatorios.
-    random_list = list()
-
+        # Return of random value.
+        return random_list[0]
+    # N iteration.
     for _ in range(n):
-        x_i = (1403580 * x_i_2 - 810728 * x_i_3) % 4294967087
-        y_i = (527612 * x_i_2 - 1370589 * x_i_3) % 429494443
-        z_i = (x_i - y_i) % 4294967087
-        random_value = z_i
+        # Elevation of the seed to squared.
+        square_value = str(seed ** 2)
+        # Square validation.
+        while(len(square_value) < 2 * t):
+            square_value = '0' + square_value
+        # Obtaining the center digits.
+        initial_index = len(square_value) // t
+        random_value = int(square_value[initial_index:initial_index + t])
+        # Normalization.
         if normalized:
-            if random_value > 0:
-                random_value = random_value / 4294967088
-            elif random_value == 0:
-                random_value = 1
-
+            random_value = random_value / (1 * 10 ** t)
+        # Adding values to a list of pseudo random numbers.
         random_list.append(random_value)
-
-        # Actualizamos valores anteriores
-        x_i_2 = x_i
-        x_i_3 = x_i_2
-        y_i_2 = y_i
-        y_i_3 = y_i_2
-
-    # Retorno de lista de pseudonúmeros aleatorios.
+        # Seed update.
+        seed = int(square_value[initial_index:initial_index + t])
+    # Return of random list.
     return random_list
 
 
@@ -434,6 +420,37 @@ def middle_products_method(seed, seed_2, n, normalized = True):
         seed = seed_2
         seed_2 = int(square_value[initial_index:initial_index + t])
     
+    # Retorno de lista de pseudonúmeros aleatorios.
+    return random_list
+
+
+# Definición del método Mersenne_Twister.
+def mersenne_twister(seed, n, normalized = True):
+    # Inicialización general
+    x_i_2 = x_i_3 = y_i_2 = y_i_3 = seed
+    z_i = 0
+    # Inicialización de pseudonúmeros aleatorios.
+    random_list = list()
+
+    for _ in range(n):
+        x_i = (1403580 * x_i_2 - 810728 * x_i_3) % 4294967087
+        y_i = (527612 * x_i_2 - 1370589 * x_i_3) % 429494443
+        z_i = (x_i - y_i) % 4294967087
+        random_value = z_i
+        if normalized:
+            if random_value > 0:
+                random_value = random_value / 4294967088
+            elif random_value == 0:
+                random_value = 1
+
+        random_list.append(random_value)
+
+        # Actualizamos valores anteriores
+        x_i_2 = x_i
+        x_i_3 = x_i_2
+        y_i_2 = y_i
+        y_i_3 = y_i_2
+
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
 
