@@ -303,6 +303,8 @@ def lfsr_method(seed, taps, n, num_bits=8, normalized=True):
     """
     # Initialization of pseudorandom numbers.
     random_list = list()
+    # Validation of n.
+    assert n > 0, f'\'n\' is a positive integer value.'
     # Initialization of LFSR Object.
     lfsr = LFSR(seed, taps)
     # Get only a unique random value.
@@ -342,6 +344,8 @@ def middle_square_method(seed, n, normalized=True):
         Returns:
             random_list: a list of values.
     """
+    # Validation of n.
+    assert n > 0, f'\'n\' is a positive integer value.'
     # Seed validation.
     t = len(str(seed))
     assert t % 2 == 0 and t > 3, "A number with even digits is required, with the number of digits greater than 3."
@@ -397,6 +401,8 @@ def middle_products_method(seed, seed_2, n, normalized=True):
         Returns:
             random_list: a list of values.
     """
+    # Validation of n.
+    assert n > 0, f'\'n\' is a positive integer value.'
     # Seed validation.
     t = len(str(seed))
     t_2 = len(str(seed_2))
@@ -454,6 +460,8 @@ def constant_multiplier_method(seed, a, n, normalized=True):
         Returns:
             random_list: a list of values.
     """
+    # Validation of n.
+    assert n > 0, f'\'n\' is a positive integer value.'
     # Seed validation.
     t = len(str(seed))
     assert t % 2 == 0 and t > 3, "A number with even digits is required, with the number of digits greater than 3."
@@ -497,6 +505,52 @@ def constant_multiplier_method(seed, a, n, normalized=True):
     return random_list
 
 
+# Blum Blum Shub method.  
+def generador_blum_blum_shub(seed, p, q, n, normalized=True):
+    """
+        Blum Blum Shub method.
+        Arguments:
+            seed: an integer value.
+            p: an integer value.
+            q: an integer value.
+            n: an integer value.
+            normalized: a boolean value.
+        Returns:
+            random_list: a list of values.
+    """
+    # Validation of n.
+    assert n > 0, f'\'n\' is a positive integer value.'
+    # Get m.
+    m = p * q
+    # Initialization of pseudorandom numbers.
+    random_list = list()
+    # Get only a unique random value.
+    if n == 1:
+        # Seed update.
+        seed = (seed ** 2) % m
+        # new random value.
+        random_value = seed
+        # Normalization.
+        if normalized:
+            random_value = random_value / m
+        # Adding values to a list of pseudo random numbers.
+        random_list.append(random_value)
+        # Return of random value.
+        return random_list[0]
+    # N iteration.
+    for _ in range(n):
+        # Seed update.
+        seed = (seed ** 2) % m
+        # new random value.
+        random_value = seed
+        # Normalization.
+        if normalized:
+            random_value = random_value / m
+        # Adding values to a list of pseudo random numbers.
+        random_list.append(random_value)
+    # Return of random list.s
+    return random_list
+
 # Definición del método Mersenne_Twister.
 def mersenne_twister(seed, n, normalized = True):
     # Inicialización general
@@ -526,15 +580,3 @@ def mersenne_twister(seed, n, normalized = True):
 
     # Retorno de lista de pseudonúmeros aleatorios.
     return random_list
-
-
-# Definición del método de Blum Blum Shub.  
-def generador_blum_blum_shub(semilla, p, q, n):
-    m = p * q
-    valores_aleatorios = []
-    
-    for x in range(n):
-        semilla = (semilla ** 2) % m
-        valores_aleatorios.append(semilla / m)
-    
-    return valores_aleatorios
