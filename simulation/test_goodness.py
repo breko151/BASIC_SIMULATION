@@ -55,6 +55,36 @@ def variance_test(numbers, alpha=0.05):
     return test
 
 
+# Form test.
+def form_test(numbers, limits=[0, 0.2, 0.4, 0.6, 0.8, 1.0], alpha=0.05):
+    """
+        Form test.
+        Arguments:
+            numbers: a list of values.
+            alpha: a float value.
+            limits: a list of values.
+        Returns:
+            test: a boolean value.
+    """
+    # Get FO and FE
+    FO, _ = np.histogram(numbers, bins=limits)
+    FE = [len(numbers) / (len(limits) - 1) for i in range(len(limits) - 1)]
+    # Get substractions.
+    subtractions = list()
+    for i in range(len(FE)):
+        subtractions.append(((FE[i] - FO[i]) ** 2) / FE[i])
+    subtractions = np.array(subtractions)
+    # Get C.
+    C = subtractions.sum()
+    # Get chi.
+    chi = chi2.ppf(1 - 0.05, len(limits) - 1)
+    test = C  < chi
+    return test
+
+
+#
+
+
 
 # Identificación  de patrones
 def pattern_identifier(random_list, num_consider = 2):
