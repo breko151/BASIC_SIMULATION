@@ -105,6 +105,117 @@ def kolmovorov_smirnov_test(numbers, alpha=0.05):
     return test
 
 
+# Poker test.
+def poker_test(numbers, alpha=0.05):
+    """
+        Poker test.
+        Arguments:
+            numbers: a list of values.
+            alpha: a float value.
+        Returns:
+            test: a boolean value.
+    """
+    # Value initialization.
+    lenghts = list()
+    str_array = list()
+    addition = 0
+    dict_valores = dict()
+    # Get max decimals.
+    for num in numbers:
+        lenghts.append(len(str(num)[2:]))
+    n_decimals = max(lenghts)
+    # Transform numbers.
+    for num in numbers:
+        str_num = str(num)
+        while len(str_num[2:]) < n_decimals:
+            str_num = str_num + '0'
+        str_array.append(str_num)
+    # For 3 decimals.
+    if n_decimals == 3:
+        dict_valores["TD"] = 0.72
+        dict_valores["1P"] = 0.27
+        dict_valores["T"] =  0.01
+        class_values = classifier(str_array, dict_valores)
+        ei = {k: v * len(numbers) for k, v in dict_valores.items()}
+        xs = dict()
+        for k in ei.keys():
+            xs[k] = (ei[k] - class_values[k]) ** 2 / ei[k]
+        for v in xs.values():
+            addition += v
+    # For 4 decimals.
+    elif n_decimals == 4:
+        dict_valores["TD"] = 0.5040
+        dict_valores["1P"] = 0.4320
+        dict_valores["2P"] = 0.0270
+        dict_valores["T"] = 0.0360
+        dict_valores["P"] = 0.0010
+        class_values = classifier(str_array, dict_valores)
+        ei = {k: v * len(numbers) for k, v in dict_valores.items()}
+        xs = dict()
+        for k in ei.keys():
+            xs[k] = (ei[k] - class_values[k]) ** 2 / ei[k]
+        for v in xs.values():
+            addition += v
+    # For 5 decimals.
+    elif n_decimals == 5:
+        dict_valores["TD"] = 0.3024
+        dict_valores["1P"] = 0.5040
+        dict_valores["2P"] = 0.1080
+        dict_valores["TP"] = 0.0090
+        dict_valores["T"] = 0.0720
+        dict_valores["P"] = 0.0045
+        dict_valores["Q"] = 0.0001
+        class_values = classifier(str_array, dict_valores)
+        ei = {k: v * len(numbers) for k, v in dict_valores.items()}
+        xs = dict()
+        for k in ei.keys():
+            xs[k] = (ei[k] - class_values[k]) ** 2 / ei[k]
+        for v in xs.values():
+            addition += v
+    chi = chi2.ppf(1 - alpha, n_decimals +  1)
+    test =  addition < chi
+    return test
+
+
+def classifier(numbers, dictonary):
+    """
+        Classifier for Poker test.
+        Argumentes: 
+            numbers: a list of values.
+            dictonary: a dict value.
+        Returns:
+            new_dictonary: a dict value.
+    """
+    # New dictonary.
+    new_dictonary = dict()
+    for k in dictonary.keys():
+        new_dictonary[k] = 0
+    for number in numbers:
+        # Transform numbers.
+        str_number = number[2:]
+        list_number = np.array([int(i) for i in str_number])
+        unique_values, counts = np.unique(list_number, return_counts=True)
+        # Clasification.
+        if len(counts) == len(str(number)[2:]):
+            new_dictonary["TD"] = new_dictonary["TD"] + 1
+        elif 2 in counts:
+            if list(counts).count(3) == 1:
+                new_dictonary["TP"] = new_dictonary["TP"] + 1 
+            else:
+                if list(counts).count(2) == 1:
+                    new_dictonary["1P"] = new_dictonary["1P"] + 1
+                elif list(counts).count(2) == 2:
+                    new_dictonary["2P"] = new_dictonary["2P"] + 1
+        elif 3 in counts:
+            if list(counts).count(2) == 0:
+                new_dictonary["T"] = new_dictonary["T"] + 1   
+        elif 4 in counts:
+            new_dictonary["P"] = new_dictonary["P"] + 1
+        elif 5 in counts:
+            new_dictonary["Q"] = new_dictonary["Q"] + 1
+    # Return new dictonary.
+    return new_dictonary
+
 # Identificación  de patrones
 def pattern_identifier(random_list, num_consider = 2):
     """
