@@ -551,6 +551,7 @@ def generador_blum_blum_shub(seed, p, q, n, normalized=True):
     # Return of random list.s
     return random_list
 
+
 # Definición del método Mersenne_Twister.
 def mersenne_twister(seed, n, normalized = True):
     # Inicialización general
