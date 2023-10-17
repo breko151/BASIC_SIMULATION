@@ -5,7 +5,7 @@
 #   16/10/2023
 
 # Import libraries needed.
-from . import norm, chi2
+from . import norm, chi2, ksone
 from . import np
 
 # Mean and distance tests.
@@ -77,13 +77,32 @@ def form_test(numbers, limits=[0, 0.2, 0.4, 0.6, 0.8, 1.0], alpha=0.05):
     # Get C.
     C = subtractions.sum()
     # Get chi.
-    chi = chi2.ppf(1 - 0.05, len(limits) - 1)
+    chi = chi2.ppf(1 - alpha, len(limits) - 1)
     test = C  < chi
     return test
 
 
-#
-
+# Kolmovorov Smirnov test.
+def kolmovorov_smirnov_test(numbers, alpha=0.05):
+    """
+        Kolmovorov Smirnov test.
+        Arguments:
+            numbers: a list of values.
+            alpha: a float value.
+        Returns:
+            test: a boolean value.
+    """
+    # Sort numbers.
+    numbers_sorted = sorted(numbers)
+    # Get frequency.
+    frequency = [i/len(numbers_sorted) for i in range(1, len(numbers_sorted) + 1)]
+    # Get substractions
+    substractions = [abs(frequency[i] - numbers_sorted[i]) for i in range(len(frequency))]
+    dmax = max(substractions)
+    d = ksone.interval(1 - alpha, len(numbers))[1]
+    # Try test.
+    test = dmax < d
+    return test
 
 
 # Identificación  de patrones
