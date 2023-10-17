@@ -55,10 +55,10 @@ def variance_test(numbers, alpha=0.05):
     return test
 
 
-# Form test.
+# Chi-Square test.
 def form_test(numbers, limits=[0, 0.2, 0.4, 0.6, 0.8, 1.0], alpha=0.05):
     """
-        Form test.
+        Chi-Square test.
         Arguments:
             numbers: a list of values.
             alpha: a float value.
