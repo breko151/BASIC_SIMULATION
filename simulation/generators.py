@@ -506,7 +506,7 @@ def constant_multiplier_method(seed, a, n, normalized=True):
 
 
 # Blum Blum Shub method.  
-def generador_blum_blum_shub(seed, p, q, n, normalized=True):
+def generator_blum_blum_shub(seed, p, q, n, normalized=True):
     """
         Blum Blum Shub method.
         Arguments:
